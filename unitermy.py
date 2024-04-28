@@ -11,6 +11,29 @@ def draw_input2():
     input_text = entry2.get()
     elements = input_text.split(";")
     draw_arc_over_elements(elements, input_text, canvas2)
+    create_dropdown(elements)
+
+
+def create_dropdown(elements):
+    dropdown_label.config(text="Choose an element:")
+    dropdown_menu["menu"].delete(0, "end")  # Clear previous options
+    for element in elements:
+        dropdown_menu["menu"].add_command(
+            label=element, command=lambda e=element: set_selected_element(e)
+        )
+
+
+def replace_element():
+    input_text = entry2.get()
+    replaced_text = input_text.replace(selected_element.get(), entry1.get())
+    elements = replaced_text.split(";")
+    draw_arc_over_elements(elements, replaced_text, canvas3)
+
+
+# Modify the set_selected_element function to call replace_element without arguments
+def set_selected_element(element):
+    selected_element.set(element)
+    replace_element()
 
 
 def draw_elements(elements, input_text, canvas):
@@ -72,5 +95,17 @@ button2.pack()
 
 canvas2 = tk.Canvas(root, width=300, height=120)
 canvas2.pack()
+
+# Dropdown menu for selecting elements
+selected_element = tk.StringVar()
+dropdown_label = tk.Label(root, text="")
+dropdown_label.pack()
+# In the root.mainloop() part, change the line that binds the selected element to the OptionMenu:
+dropdown_menu = tk.OptionMenu(root, selected_element, "", command=set_selected_element)
+dropdown_menu.pack()
+
+# Canvas to show replaced element from canvas2
+canvas3 = tk.Canvas(root, width=300, height=120)
+canvas3.pack()
 
 root.mainloop()
