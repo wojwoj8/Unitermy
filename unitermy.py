@@ -28,20 +28,23 @@ def draw_canvas3(
 ):
     canvas.delete("all")
     width = 18
-    x = 20
+    x = 50
+    w = 25
     for element in elements:
         x += width
 
+    for elem in first_canvas:
+        w += width
     # Draw the arc
     canvas.create_arc(
         10, 10, x, 40, start=20, extent=140, outline="black", width=2, style="arc"
     )
 
-    # Draw the line under the arc
-    canvas.create_line(10, 62, x - 10, 62, fill="black")  # solid line under dashes
-    # Draw the "|" symbols at the ends of the line
-    canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
-    canvas.create_text(x - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
+    # # Draw the line under the arc
+    # canvas.create_line(10, 62, x - 10, 62, fill="black")  # solid line under dashes
+    # # Draw the "|" symbols at the ends of the line
+    # canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
+    # canvas.create_text(x - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
 
     # Draw the input text
     canvas.create_text(
@@ -51,13 +54,15 @@ def draw_canvas3(
     if selected_element is not None:
         # Draw the selected element text under the arc
         canvas.create_text(
-            x / 2, 80, text=first_canvas, font=("Helvetica", 12), anchor="center"
+            w / 2 - 15, 80, text=first_canvas, font=("Helvetica", 12), anchor="center"
         )
-        # Draw the line under the selected element
-        canvas.create_line(10, 62, x - 10, 62, fill="black")  # solid line under dashes
+        # Draw the line under the selected element (shorter than the arc)
+        canvas.create_line(
+            10, 62, w / 2, 62, fill="black"
+        )  # shorter line under the arc
         # Draw the "|" symbols at the ends of the line
         canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
-        canvas.create_text(x - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
+        canvas.create_text(w / 2, 60, text="|", anchor="e", font=("Helvetica", 20))
 
 
 def replace_element():
