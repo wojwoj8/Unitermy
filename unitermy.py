@@ -36,10 +36,10 @@ def draw_canvas3(
 ):
 
     f_canvas_elem = first_canvas.split(";")
-    print(f_canvas_elem)
+    # print(f_canvas_elem)
 
     start_index = find_start_index(elements, f_canvas_elem)
-    print(start_index)
+    # print(start_index)
     elements = ";".join(elements)
     canvas_width = canvas.winfo_width()
     canvas_height = canvas.winfo_height()
@@ -58,7 +58,7 @@ def draw_canvas3(
         anchor="center",
     )
 
-    print(first_canvas)
+    # print(first_canvas)
 
     temp_text = canvas.create_text(
         text_width,
@@ -115,10 +115,6 @@ def draw_canvas3(
         width=2,
         style="arc",
     )
-
-
-# Example usage:
-# draw_canvas3(elements, input_text, replaced_text, first_canvas, canvas, selected_element)
 
 
 def replace_element():
@@ -245,7 +241,7 @@ dropdown_menu = tk.OptionMenu(root, selected_element, "", command=set_selected_e
 dropdown_menu.pack()
 
 # Canvas to show replaced element from canvas2
-canvas3 = tk.Canvas(root, width=300, height=120)
+canvas3 = tk.Canvas(root, width=300, height=220)
 canvas3.pack()
 
 root.mainloop()
