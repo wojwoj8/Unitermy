@@ -23,11 +23,56 @@ def create_dropdown(elements):
         )
 
 
+def draw_canvas3(
+    elements, input_text, replaced_text, first_canvas, canvas, selected_element=None
+):
+    canvas.delete("all")
+    width = 18
+    x = 20
+    for element in elements:
+        x += width
+
+    # Draw the arc
+    canvas.create_arc(
+        10, 10, x, 40, start=20, extent=140, outline="black", width=2, style="arc"
+    )
+
+    # Draw the line under the arc
+    canvas.create_line(10, 62, x - 10, 62, fill="black")  # solid line under dashes
+    # Draw the "|" symbols at the ends of the line
+    canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
+    canvas.create_text(x - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
+
+    # Draw the input text
+    canvas.create_text(
+        (x + 5) / 2, 30, text=input_text, font=("Helvetica", 12), anchor="center"
+    )
+
+    if selected_element is not None:
+        # Draw the selected element text under the arc
+        canvas.create_text(
+            x / 2, 80, text=first_canvas, font=("Helvetica", 12), anchor="center"
+        )
+        # Draw the line under the selected element
+        canvas.create_line(10, 62, x - 10, 62, fill="black")  # solid line under dashes
+        # Draw the "|" symbols at the ends of the line
+        canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
+        canvas.create_text(x - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
+
+
 def replace_element():
     input_text = entry2.get()
+    first_canvas = entry1.get()
     replaced_text = input_text.replace(selected_element.get(), entry1.get())
     elements = replaced_text.split(";")
-    draw_arc_over_elements(elements, replaced_text, canvas3)
+    draw_canvas3(
+        elements,
+        replaced_text,
+        input_text,
+        first_canvas,
+        canvas3,
+        selected_element=selected_element.get(),
+    )
 
 
 # Modify the set_selected_element function to call replace_element without arguments
