@@ -27,44 +27,87 @@ def draw_canvas3(
     elements, input_text, replaced_text, first_canvas, canvas, selected_element=None
 ):
     alone_elem = replaced_text.replace(selected_element, "")
+    # for correct width
+    f_canvas = first_canvas.split(";")
     canvas.delete("all")
     width = 18
-    x = 50
-    w = 25
-
+    x = 60
+    # ARC WIDTH
     for element in elements:
         x += width
+    w = 20
 
-    for elem in first_canvas:
+    # LINE WIDTH
+    for el in f_canvas:
         w += width
+
+    print(w)
     # Draw the arc
     canvas.create_arc(
         10, 10, x, 40, start=20, extent=140, outline="black", width=2, style="arc"
     )
 
-    # # Draw the line under the arc
-    # canvas.create_line(10, 62, x - 10, 62, fill="black")  # solid line under dashes
-    # # Draw the "|" symbols at the ends of the line
-    # canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
-    # canvas.create_text(x - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
+    # Draw line
+    #
+    canvas.create_line(10, 62, w - 10, 62, fill="black")  # solid line under dashes
+    canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
+    canvas.create_text(w - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
 
-    # Draw the input text
-    canvas.create_text(
-        (x + 5) / 2, 30, text=alone_elem, font=("Helvetica", 12), anchor="center"
+    canvas1_text = canvas.create_text(
+        w / 2, 80, text=first_canvas, font=("Helvetica", 12), anchor="center"
     )
+    print(canvas.bbox(canvas1_text))
 
-    if selected_element is not None:
-        # Draw the selected element text under the arc
-        canvas.create_text(
-            w / 2 - 15, 80, text=first_canvas, font=("Helvetica", 12), anchor="center"
-        )
-        # Draw the line under the selected element (shorter than the arc)
-        canvas.create_line(
-            10, 62, w / 2, 62, fill="black"
-        )  # shorter line under the arc
-        # Draw the "|" symbols at the ends of the line
-        canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
-        canvas.create_text(w / 2, 60, text="|", anchor="e", font=("Helvetica", 20))
+
+######################################
+# if A;
+# if alone_elem.index(";") == 1:
+
+#     # Draw the input text
+#     canvas.create_text(
+#         w - 20,
+#         35,
+#         text=alone_elem,
+#         font=("Helvetica", 12),
+#         anchor="center",
+#     )
+
+#     ##################################################
+
+#     canvas.create_line(
+#         (w - 25) * 3, 37, w, 37, fill="black"
+#     )  # solid line under dashes
+#     canvas.create_text(10 * 3, 35, text="|", anchor="w", font=("Helvetica", 20))
+#     canvas.create_text(
+#         (w - 25) * 3, 35, text="|", anchor="e", font=("Helvetica", 20)
+#     )
+
+#     canvas.create_text(
+#         (w / 2 - 9) * 3,
+#         45,
+#         text=first_canvas,
+#         font=("Helvetica", 12),
+#         anchor="center",
+#     )
+#     # if ;A
+# else:
+#     # Draw the input text
+#     canvas.create_text(
+#         w,
+#         35,
+#         text=alone_elem,
+#         font=("Helvetica", 12),
+#         anchor="center",
+#     )
+#     ##################################################
+
+#     canvas.create_line(20, 37, w - 15, 37, fill="black")  # solid line under dashes
+#     canvas.create_text(20, 35, text="|", anchor="w", font=("Helvetica", 20))
+#     canvas.create_text(w - 15, 35, text="|", anchor="e", font=("Helvetica", 20))
+
+#     canvas.create_text(
+#         w / 2, 45, text=first_canvas, font=("Helvetica", 12), anchor="center"
+#     )
 
 
 def replace_element():
@@ -90,33 +133,72 @@ def set_selected_element(element):
 
 def draw_elements(elements, input_text, canvas):
     canvas.delete("all")
-    width = 18
-    x = 20
-    for element in elements:
-        x += width
 
-    canvas.create_line(10, 62, x - 10, 62, fill="black")  # solid line under dashes
-    canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
-    canvas.create_text(x - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
+    canvas_width = canvas.winfo_width()
+    canvas_height = canvas.winfo_height()
+    text_width = canvas_width / 2
+    text_height = canvas_height / 2
 
-    canvas.create_text(
-        x / 2, 80, text=input_text, font=("Helvetica", 12), anchor="center"
+    text = canvas.create_text(
+        text_width,
+        text_height,
+        text=input_text,
+        font=("Helvetica", 12),
+        anchor="center",
     )
+    bbox = canvas.bbox(text)
+    canvas.create_line(bbox[0], bbox[1] - 5, bbox[2], bbox[1] - 5)
+    canvas.create_line(bbox[0], bbox[1], bbox[0], bbox[1] - 10)
+    canvas.create_line(bbox[2], bbox[1], bbox[2], bbox[1] - 10)
 
 
 def draw_arc_over_elements(elements, input_text, canvas):
     canvas.delete("all")
-    width = 18
-    x = 20
-    for element in elements:
-        x += width
 
-    canvas.create_arc(
-        10, 10, x, 40, start=20, extent=140, outline="black", width=2, style="arc"
+    canvas_width = canvas.winfo_width()
+    canvas_height = canvas.winfo_height()
+    text_width = canvas_width / 2
+    text_height = canvas_height / 2
+
+    text = canvas.create_text(
+        text_width,
+        text_height,
+        text=input_text,
+        font=("Helvetica", 12),
+        anchor="center",
     )
-    canvas.create_text(
-        (x + 5) / 2, 30, text=input_text, font=("Helvetica", 12), anchor="center"
-    )  # Positioning text under the arc
+    bbox = canvas.bbox(text)
+
+    x1, y1, x2, y2 = bbox
+
+    # Calculate the center point of the bounding box
+    center_x = (x1 + x2) / 2
+    center_y = (y1 + y2) / 2
+
+    # Calculate the radius of the circle based on the bounding box dimensions
+    radius = (x2 - x1) / 3
+
+    # Calculate the start and end angles for the arc
+    start_angle = 20
+    end_angle = 160
+
+    # Create the arc using the bounding box dimensions and angles
+    canvas.create_arc(
+        x1,
+        center_y - radius,
+        x2,
+        center_y + radius,
+        start=start_angle,
+        extent=end_angle - start_angle,
+        outline="black",
+        width=2,
+        style="arc",
+    )
+
+    # canvas.create_arc(
+    #      10, 10, x, 40, start=20, extent=140, outline="black", width=2, style="arc"
+    #  )
+    # Positioning text under the arc
 
 
 root = tk.Tk()
