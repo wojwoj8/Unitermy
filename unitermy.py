@@ -23,91 +23,102 @@ def create_dropdown(elements):
         )
 
 
+def find_start_index(f_canvas_elem, elements):
+    try:
+        start_index = f_canvas_elem.index(elements[0])
+        return start_index
+    except ValueError:
+        return -1  # If the elements are not found in f_canvas_elem
+
+
 def draw_canvas3(
     elements, input_text, replaced_text, first_canvas, canvas, selected_element=None
 ):
-    alone_elem = replaced_text.replace(selected_element, "")
-    # for correct width
-    f_canvas = first_canvas.split(";")
+
+    f_canvas_elem = first_canvas.split(";")
+    print(f_canvas_elem)
+
+    start_index = find_start_index(elements, f_canvas_elem)
+    print(start_index)
+    elements = ";".join(elements)
+    canvas_width = canvas.winfo_width()
+    canvas_height = canvas.winfo_height()
+    text_width = canvas_width / 2
+    text_height = canvas_height / 2
+    x = 0
+    x2 = 0
     canvas.delete("all")
-    width = 18
-    x = 60
-    # ARC WIDTH
-    for element in elements:
-        x += width
-    w = 20
+    # Draw the text and lines next to each other under the arc
 
-    # LINE WIDTH
-    for el in f_canvas:
-        w += width
+    text_2 = canvas.create_text(
+        text_width,
+        text_height,
+        text=first_canvas,
+        font=("Helvetica", 12),
+        anchor="center",
+    )
 
-    print(w)
-    # Draw the arc
+    print(first_canvas)
+
+    temp_text = canvas.create_text(
+        text_width,
+        text_height,
+        text=elements[: (int(start_index) * 2)],
+        font=("Helvetica", 12),
+        anchor="center",
+    )
+    bbox = canvas.bbox(temp_text)
+    canvas.create_line(bbox[0], bbox[1] - 5, bbox[2], bbox[1] - 5)
+    x2 = bbox[2] - bbox[0]
+
+    bbox = canvas.bbox(text_2)
+    canvas.create_line(bbox[0], bbox[1] - 5, bbox[2], bbox[1] - 5)
+    canvas.create_line(bbox[0], bbox[1], bbox[0], bbox[1] - 10)
+    canvas.create_line(bbox[2], bbox[1], bbox[2], bbox[1] - 10)
+
+    x = bbox[2] - bbox[0]
+    canvas.delete("all")
+
+    text = canvas.create_text(
+        text_width,
+        text_height,
+        text=elements,
+        font=("Helvetica", 12),
+        anchor="center",
+    )
+    bbox = canvas.bbox(text)
+    canvas.create_line(x2 + bbox[0], bbox[1] - 5, x2 + bbox[0] + x, bbox[1] - 5)
+    canvas.create_line(x2 + bbox[0], bbox[1], x2 + bbox[0], bbox[1] - 10)
+    canvas.create_line(x2 + bbox[0] + x, bbox[1], x2 + bbox[0] + x, bbox[1] - 10)
+    x1, y1, x2, y2 = bbox
+
+    # Calculate the center point of the bounding box
+    center_x = (x1 + x2) / 2
+    center_y = (y1 + y2) / 2
+
+    # Calculate the radius of the circle based on the bounding box dimensions
+    radius = (x2 - x1) / 3
+
+    # Calculate the start and end angles for the arc
+    start_angle = 20
+    end_angle = 160
+
+    # Create the arc using the bounding box dimensions and angles
     canvas.create_arc(
-        10, 10, x, 40, start=20, extent=140, outline="black", width=2, style="arc"
+        x1,
+        center_y - 10 - radius,
+        x2,
+        center_y - 10 + radius,
+        start=start_angle,
+        extent=end_angle - start_angle,
+        outline="black",
+        width=2,
+        style="arc",
     )
 
-    # Draw line
-    #
-    canvas.create_line(10, 62, w - 10, 62, fill="black")  # solid line under dashes
-    canvas.create_text(10, 60, text="|", anchor="w", font=("Helvetica", 20))
-    canvas.create_text(w - 10, 60, text="|", anchor="e", font=("Helvetica", 20))
 
-    canvas1_text = canvas.create_text(
-        w / 2, 80, text=first_canvas, font=("Helvetica", 12), anchor="center"
-    )
-    print(canvas.bbox(canvas1_text))
-
-
-######################################
-# if A;
-# if alone_elem.index(";") == 1:
-
-#     # Draw the input text
-#     canvas.create_text(
-#         w - 20,
-#         35,
-#         text=alone_elem,
-#         font=("Helvetica", 12),
-#         anchor="center",
-#     )
-
-#     ##################################################
-
-#     canvas.create_line(
-#         (w - 25) * 3, 37, w, 37, fill="black"
-#     )  # solid line under dashes
-#     canvas.create_text(10 * 3, 35, text="|", anchor="w", font=("Helvetica", 20))
-#     canvas.create_text(
-#         (w - 25) * 3, 35, text="|", anchor="e", font=("Helvetica", 20)
-#     )
-
-#     canvas.create_text(
-#         (w / 2 - 9) * 3,
-#         45,
-#         text=first_canvas,
-#         font=("Helvetica", 12),
-#         anchor="center",
-#     )
-#     # if ;A
-# else:
-#     # Draw the input text
-#     canvas.create_text(
-#         w,
-#         35,
-#         text=alone_elem,
-#         font=("Helvetica", 12),
-#         anchor="center",
-#     )
-#     ##################################################
-
-#     canvas.create_line(20, 37, w - 15, 37, fill="black")  # solid line under dashes
-#     canvas.create_text(20, 35, text="|", anchor="w", font=("Helvetica", 20))
-#     canvas.create_text(w - 15, 35, text="|", anchor="e", font=("Helvetica", 20))
-
-#     canvas.create_text(
-#         w / 2, 45, text=first_canvas, font=("Helvetica", 12), anchor="center"
-#     )
+# Example usage:
+# draw_canvas3(elements, input_text, replaced_text, first_canvas, canvas, selected_element)
 
 
 def replace_element():
@@ -194,11 +205,6 @@ def draw_arc_over_elements(elements, input_text, canvas):
         width=2,
         style="arc",
     )
-
-    # canvas.create_arc(
-    #      10, 10, x, 40, start=20, extent=140, outline="black", width=2, style="arc"
-    #  )
-    # Positioning text under the arc
 
 
 root = tk.Tk()
