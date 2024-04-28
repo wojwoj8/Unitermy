@@ -26,10 +26,12 @@ def create_dropdown(elements):
 def draw_canvas3(
     elements, input_text, replaced_text, first_canvas, canvas, selected_element=None
 ):
+    alone_elem = replaced_text.replace(selected_element, "")
     canvas.delete("all")
     width = 18
     x = 50
     w = 25
+
     for element in elements:
         x += width
 
@@ -48,7 +50,7 @@ def draw_canvas3(
 
     # Draw the input text
     canvas.create_text(
-        (x + 5) / 2, 30, text=input_text, font=("Helvetica", 12), anchor="center"
+        (x + 5) / 2, 30, text=alone_elem, font=("Helvetica", 12), anchor="center"
     )
 
     if selected_element is not None:
